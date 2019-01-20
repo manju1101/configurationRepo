@@ -38,7 +38,9 @@ node{
     
         stage('upload') {
               script { 
-                 jenkinsGroovy.uploadScript();
+                 def server = Artifactory.server 'Devops301Artifactory'
+                 jenkinsGroovy.uploadSpec;
+
                  server.upload(uploadSpec) 
                }
         }
