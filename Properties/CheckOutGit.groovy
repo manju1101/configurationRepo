@@ -4,7 +4,7 @@ def checkOutRepo(String repo, String branch, String credentials){
         credentialsId: credentials
 }
 
-def stage('upload') {
+def uploadScript(){
               script { 
                  def server = Artifactory.server 'Devops301Artifactory'
                  def uploadSpec = """{
@@ -14,6 +14,6 @@ def stage('upload') {
                     }]
                  }"""
                }
-        }
+}
 
 return this
