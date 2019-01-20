@@ -38,14 +38,7 @@ node{
     
         stage('upload') {
               script { 
-                 def server = Artifactory.server 'Devops301Artifactory'
-                 def uploadSpec = """{
-                    "files": [{
-                       "pattern": "target/*.war",
-                       "target": "example-repo-local/Devops301_${env.BUILD_NUMBER}/"
-                    }]
-                 }"""
-
+                 jenkinsGroovy.uploadScript();
                  server.upload(uploadSpec) 
                }
         }
