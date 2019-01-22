@@ -56,18 +56,18 @@ node{
         }
         
         stage('create temp volume') {
-                sh 'docker stop dockertomcat'
-                sh 'docker rm dockertomcat'
+                sh 'docker stop jenkinsProp['DOCKER_NAME']'
+                sh 'docker rm jenkinsProp['DOCKER_NAME']'
                sh 'sudo rm -rf /tmp/webapps'
                 sh 'mkdir /tmp/webapps'
-                sh 'cp /var/lib/jenkins/workspace/EndToEndPipeline/target/*.war /tmp/webapps/' 
+                sh 'cp ./target/*.war /tmp/webapps/' 
         }
         
         stage('Building tomcat image') {
             //   docker.build registry + ":$BUILD_NUMBER"
             // docker rmi tomcat
-            docker.image("tomcat:latest").pull();
-            sh 'docker run -d --name dockertomcat -p 8888:8080 -v /tmp/webapps/:/usr/local/tomcat/webapps/:rw tomcat:latest'
+            docker.image("jenkinsProp['DOCKER_IMAGE']").pull();
+            sh 'docker run -d --name jenkinsProp['DOCKER_NAME'] -p jenkinsProp['DOCKER_PORT'] -v /tmp/webapps/:/usr/local/tomcat/webapps/:rw jenkinsProp['DOCKER_IMAGE']'
         }
         
         stage('Send email'){
