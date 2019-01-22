@@ -55,6 +55,21 @@ node{
             reuseFunction.uploadToArtifactory(jenkinsProp['ARTIFACTORY_ID'] ,jenkinsProp['ARTIFACTORY_PATTERN'],jenkinsProp['ARTIFACTORY_TARGET']  );
         }
         
+        stage('create temp volume') {
+                sh 'docker stop dockertomcat'
+                sh 'docker rm dockertomcat'
+               sh 'sudo rm -rf /tmp/webapps'
+                sh 'mkdir /tmp/webapps'
+                sh 'cp /var/lib/jenkins/workspace/EndToEndPipeline/target/*.war /tmp/webapps/' 
+        }
+        
+        stage('Building tomcat image') {
+            //   docker.build registry + ":$BUILD_NUMBER"
+            // docker rmi tomcat
+            docker.image("tomcat:latest").pull();
+            sh 'docker run -d --name dockertomcat -p 8888:8080 -v /tmp/webapps/:/usr/local/tomcat/webapps/:rw tomcat:latest'
+        }
+        
         stage('Send email'){
             try{
                 reuseFunction.triggerEmail();
