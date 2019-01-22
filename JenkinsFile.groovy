@@ -1,4 +1,4 @@
-def utilRepo, jenkinsGroovy, reuseFunction, gitLoad, utilCheckOut, commonUtilProp, gitProperties
+def utilRepo, jenkinsGroovy, reuseFunction, gitLoad, utilCheckOut, commonUtilProp, gitProperties, jenkinsProp
 def myGitAccess = 'cf6edfe6-5dc7-4bbf-b4f5-491e8e83b22b'
 def branchToCheckOut = 'master'
 def jenkinsRepo = 'https://github.com/manju1101/configurationRepo.git'
@@ -12,6 +12,7 @@ node{
                 url: jenkinsRepo
 
                 gitProperties = readProperties  file: './Properties/gitlab.properties'
+                jenkinsProp = readProperties  file: './Properties/JenkinsFile.properties'
                 jenkinsGroovy = load './Properties/CheckOutGit.groovy'
                 // load util repo
                 utilRepo =jenkinsGroovy.checkOutRepo(gitProperties['GIT_UTIL_REPO'], branchToCheckOut,myGitAccess);
@@ -35,8 +36,8 @@ node{
                 }
             }
         }
-    
-        stage('upload') {
+        
+        /*stage('upload') {
               script { 
                  def server = Artifactory.server 'Devops301Artifactory'
                  def uploadSpec = """{
@@ -48,16 +49,10 @@ node{
 
                  server.upload(uploadSpec) 
                }
-        }
+        }*/
         
-        stage('Create docker tomcat image') {
-            script {
-            //   docker.build registry + ":$BUILD_NUMBER"
-            // docker rmi tomcat
-            docker.image(commonUtilProp['TOMCAT_IMAGE']).pull();
-            sh 'docker run -d --name '+commonUtilProp['TOMCAT_LOCAL_NAME']+' -p '+commonUtilProp['TOMCAT_HOST_PORT']+' '+
-            commonUtilProp['TOMCAT_IMAGE']
-            }
+        stage('upload') {
+            reuseFunction.uploadToArtifactory(jenkinsProp['ARTIFACTORY_ID'] ,jenkinsProp['ARTIFACTORY_PATTERN'],jenkinsProp['ARTIFACTORY_TARGET']  );
         }
         
         stage('Send email'){
@@ -71,4 +66,3 @@ node{
             
         }
     }
-
