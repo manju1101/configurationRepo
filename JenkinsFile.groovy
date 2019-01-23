@@ -52,7 +52,7 @@ node{
         }*/
         
         stage('upload') {
-            reuseFunction.uploadToArtifactory(jenkinsProp['ARTIFACTORY_ID'] ,jenkinsProp['ARTIFACTORY_PATTERN'],jenkinsProp['ARTIFACTORY_TARGET']  );
+            reuseFunction.uploadToArtifactory(jenkinsProp['ARTIFACTORY_ID'] ,jenkinsProp['ARTIFACTORY_PATTERN'],jenkinsProp['ARTIFACTORY_TARGET']+env.BUILD_NUMBER+'/'  );
         }
         
         stage('create temp volume') {
