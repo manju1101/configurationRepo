@@ -37,7 +37,7 @@ node{
             }
         }
         
-        /*stage('upload') {
+        stage('upload') {
               script { 
                  def server = Artifactory.server 'Devops301Artifactory'
                  def uploadSpec = """{
@@ -49,11 +49,11 @@ node{
 
                  server.upload(uploadSpec) 
                }
-        }*/
-        
-        stage('upload') {
-            reuseFunction.uploadToArtifactory(jenkinsProp['ARTIFACTORY_ID'] ,jenkinsProp['ARTIFACTORY_PATTERN'],jenkinsProp['ARTIFACTORY_TARGET']+env.BUILD_NUMBER+'/'  );
         }
+        
+        /*stage('upload') {
+            reuseFunction.uploadToArtifactory(jenkinsProp['ARTIFACTORY_ID'] ,jenkinsProp['ARTIFACTORY_PATTERN'],jenkinsProp['ARTIFACTORY_TARGET']+env.BUILD_NUMBER+'/'  );
+        }*/
         
         stage('create temp volume') {
             println jenkinsProp['DOCKER_NAME']
